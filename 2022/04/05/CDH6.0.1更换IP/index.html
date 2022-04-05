@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="张秋雨">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="CDH6.0.1更换IP1、集群ip地址12345678910111213## 更换前集群各个节点的ip和hostname    192.168.3.14 cdhmaster    192.168.3.16 cdhslave01    192.168.3.17 cdhslave02    192.168.3.19 cdhslave03## 更换后的集群各个节点的ip和hostname    192">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rainy">
+<meta property="og:url" content="http://example.com/2022/04/05/CDH6.0.1%E6%9B%B4%E6%8D%A2IP/index.html">
+<meta property="og:site_name" content="rainy">
+<meta property="og:description" content="CDH6.0.1更换IP1、集群ip地址12345678910111213## 更换前集群各个节点的ip和hostname    192.168.3.14 cdhmaster    192.168.3.16 cdhslave01    192.168.3.17 cdhslave02    192.168.3.19 cdhslave03## 更换后的集群各个节点的ip和hostname    192">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/CM%E9%A1%B5%E9%9D%A2%E5%85%B3%E9%97%AD%E6%89%80%E6%9C%89%E6%9C%8D%E5%8A%A1.png">
+<meta property="og:image" content="http://example.com/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9mysql%E4%B8%AD%E7%9A%84scm%E5%85%83%E6%95%B0%E6%8D%AE--%E7%99%BB%E5%BD%95root%E7%94%A8%E6%88%B7.png">
+<meta property="og:image" content="http://example.com/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9mysql%E4%B8%AD%E7%9A%84scm%E5%85%83%E6%95%B0%E6%8D%AE-1594971644760.png">
+<meta property="og:image" content="http://example.com/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9%E5%90%84%E4%B8%AA%E4%B8%BB%E6%9C%BA%E4%B8%8A%E7%9A%84cloudera-scm-agent%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.png">
+<meta property="og:image" content="http://example.com/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9NTP%E6%9C%8D%E5%8A%A1-master%E8%8A%82%E7%82%B9.png">
+<meta property="og:image" content="http://example.com/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9NTP%E6%9C%8D%E5%8A%A1-%E4%BB%8E%E8%8A%82%E7%82%B9.png">
+<meta property="og:image" content="http://example.com/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BAip.png">
+<meta property="og:image" content="http://example.com/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9hosts%E6%96%87%E4%BB%B6.png">
+<meta property="og:image" content="http://example.com/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84hosts%E6%96%87%E4%BB%B6.png">
+<meta property="og:image" content="http://example.com/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84hosts%E6%96%87%E4%BB%B62.png">
+<meta property="article:published_time" content="2022-04-05T14:37:26.757Z">
+<meta property="article:modified_time" content="2021-06-08T08:55:18.000Z">
+<meta property="article:author" content="张秋雨">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/CM%E9%A1%B5%E9%9D%A2%E5%85%B3%E9%97%AD%E6%89%80%E6%9C%89%E6%9C%8D%E5%8A%A1.png">
+  
+  
+  <title>rainy</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-04-05 22:37" pubdate>
+        2022年4月5日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      22 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none"></h1>
+            
+            <div class="markdown-body">
+              <h1 id="CDH6-0-1更换IP"><a href="#CDH6-0-1更换IP" class="headerlink" title="CDH6.0.1更换IP"></a>CDH6.0.1更换IP</h1><h2 id="1、集群ip地址"><a href="#1、集群ip地址" class="headerlink" title="1、集群ip地址"></a>1、集群ip地址</h2><figure class="highlight apache"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment">## 更换前集群各个节点的ip和hostname</span><br>    <span class="hljs-attribute">192</span>.<span class="hljs-number">168</span>.<span class="hljs-number">3</span>.<span class="hljs-number">14</span> cdhmaster<br>    <span class="hljs-attribute">192</span>.<span class="hljs-number">168</span>.<span class="hljs-number">3</span>.<span class="hljs-number">16</span> cdhslave01<br>    <span class="hljs-attribute">192</span>.<span class="hljs-number">168</span>.<span class="hljs-number">3</span>.<span class="hljs-number">17</span> cdhslave02<br>    <span class="hljs-attribute">192</span>.<span class="hljs-number">168</span>.<span class="hljs-number">3</span>.<span class="hljs-number">19</span> cdhslave03<br><br><span class="hljs-comment">## 更换后的集群各个节点的ip和hostname</span><br><br>    <span class="hljs-attribute">192</span>.<span class="hljs-number">168</span>.xxx.xxx cdhmaster<br>    <span class="hljs-attribute">192</span>.<span class="hljs-number">168</span>.xxx.xxx cdhslave01<br>    <span class="hljs-attribute">192</span>.<span class="hljs-number">168</span>.xxx.xxx cdhslave02<br>    <span class="hljs-attribute">192</span>.<span class="hljs-number">168</span>.xxx.xxx cdhslave03<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="2、停止所有服务"><a href="#2、停止所有服务" class="headerlink" title="2、停止所有服务"></a>2、停止所有服务</h2><h3 id="2-1、在Cloudera-Manager页面中关闭所有服务"><a href="#2-1、在Cloudera-Manager页面中关闭所有服务" class="headerlink" title="2.1、在Cloudera Manager页面中关闭所有服务"></a>2.1、在Cloudera Manager页面中关闭所有服务</h3><p><img src="/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/CM%E9%A1%B5%E9%9D%A2%E5%85%B3%E9%97%AD%E6%89%80%E6%9C%89%E6%9C%8D%E5%8A%A1.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2-2、master节点（cdhmaster）"><a href="#2-2、master节点（cdhmaster）" class="headerlink" title="2.2、master节点（cdhmaster）"></a>2.2、master节点（cdhmaster）</h3><figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sqf">systemctl <span class="hljs-built_in">stop</span> cloudera-scm-server<br><br>systemctl <span class="hljs-built_in">stop</span> cloudera-scm-<span class="hljs-built_in">agent</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-3、slaves节点（cdhslave01-cdhslave03）"><a href="#2-3、slaves节点（cdhslave01-cdhslave03）" class="headerlink" title="2.3、slaves节点（cdhslave01~cdhslave03）"></a>2.3、slaves节点（cdhslave01~cdhslave03）</h3><figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sqf">systemctl <span class="hljs-built_in">stop</span> cloudera-scm-<span class="hljs-built_in">agent</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="3、修改mysql中scm元数据（cdhmaster）"><a href="#3、修改mysql中scm元数据（cdhmaster）" class="headerlink" title="3、修改mysql中scm元数据（cdhmaster）"></a>3、修改mysql中scm元数据（cdhmaster）</h2><h3 id="3-1、输入-mysql-u-root-p-回车，根据提示输入密码，登录"><a href="#3-1、输入-mysql-u-root-p-回车，根据提示输入密码，登录" class="headerlink" title="3.1、输入 mysql -u root -p 回车，根据提示输入密码，登录"></a>3.1、输入 <strong>mysql -u root -p</strong> 回车，根据提示输入密码，登录</h3><p><img src="/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9mysql%E4%B8%AD%E7%9A%84scm%E5%85%83%E6%95%B0%E6%8D%AE--%E7%99%BB%E5%BD%95root%E7%94%A8%E6%88%B7.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="3-2、修改scm数据库上的主机名对应的IP"><a href="#3-2、修改scm数据库上的主机名对应的IP" class="headerlink" title="3.2、修改scm数据库上的主机名对应的IP"></a>3.2、修改scm数据库上的主机名对应的IP</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 使用scm数据库<br>mysql&gt; use scm;<br><br>-- 查看集群中主机和ip信息<br>mysql&gt;  SELECT HOST_ID, HOST_IDENTIFIER, NAME, IP_ADDRESS  FROM HOSTS;<br><br>-- 查询结果<br>    /* <br><br>    +---------+--------------------------------------+------------+--------------+<br>    | HOST_ID | HOST_IDENTIFIER                      | NAME       | IP_ADDRESS   |<br>    +---------+--------------------------------------+------------+--------------+<br>    |       1 | 16675a65-4991-42ce-9b03-a241cc8ec352 | cdhmaster  | 192.168.3.14 |<br>    |       2 | 7878ea20-a62b-409d-a5b8-6ce1941c42e3 | cdhslave02 | 192.168.3.17 |<br>    |       3 | cd9bb109-eaa9-44da-93fc-96a1e29d28a2 | cdhslave03 | 192.168.3.19 |<br>    |       4 | 74c84a2d-ec9f-4834-9417-93fbb73407d2 | cdhslave01 | 192.168.3.16 |<br>    +---------+--------------------------------------+------------+--------------+<br><br>    */<br>    <br>-- 修改各个主机对应的ip<br>mysql&gt; UPDATE HOSTS SET IP_ADDRESS=&#x27;XXX.XXX.XXX.XXX&#x27; WHERE HOST_ID=1;<br>mysql&gt; UPDATE HOSTS SET IP_ADDRESS=&#x27;XXX.XXX.XXX.XXX&#x27; WHERE HOST_ID=2;<br>mysql&gt; UPDATE HOSTS SET IP_ADDRESS=&#x27;XXX.XXX.XXX.XXX&#x27; WHERE HOST_ID=3;<br>mysql&gt; UPDATE HOSTS SET IP_ADDRESS=&#x27;XXX.XXX.XXX.XXX&#x27; WHERE HOST_ID=4;<br><br>-- 修改完成之后，退出。<br>mysql&gt; exit;<br><br></code></pre></td></tr></table></figure>
+
+<p><img src="/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9mysql%E4%B8%AD%E7%9A%84scm%E5%85%83%E6%95%B0%E6%8D%AE-1594971644760.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="4、修改各个主机的cloudera-scm-agent服务的配置文件"><a href="#4、修改各个主机的cloudera-scm-agent服务的配置文件" class="headerlink" title="4、修改各个主机的cloudera-scm-agent服务的配置文件"></a>4、修改各个主机的cloudera-scm-agent服务的配置文件</h2><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-comment">## 打开cloudera-scm-agent服务配置文件</span><br>vi <span class="hljs-regexp">/etc/</span>cloudera-scm-agent/config.ini<br><br><span class="hljs-comment">## 修改server_host的值（指cloudera-scm-server(主节点)的ip）</span><br><br></code></pre></td></tr></table></figure>
+
+<p><img src="/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9%E5%90%84%E4%B8%AA%E4%B8%BB%E6%9C%BA%E4%B8%8A%E7%9A%84cloudera-scm-agent%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="5、修改NTP服务配置"><a href="#5、修改NTP服务配置" class="headerlink" title="5、修改NTP服务配置"></a>5、修改NTP服务配置</h2><h3 id="5-1、关闭ntp服务"><a href="#5-1、关闭ntp服务" class="headerlink" title="5.1、关闭ntp服务"></a>5.1、关闭ntp服务</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-comment">## 查看ntp服务状态</span><br>    service ntpd status<br><span class="hljs-comment">## 暂停ntp服务</span><br>    service ntpd stop<br>vi <span class="hljs-regexp">/etc/</span>ntp.conf<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-2、cdhmaster节点"><a href="#5-2、cdhmaster节点" class="headerlink" title="5.2、cdhmaster节点"></a>5.2、cdhmaster节点</h3><p><img src="/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9NTP%E6%9C%8D%E5%8A%A1-master%E8%8A%82%E7%82%B9.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="5-3、cdhslave01-cdhslaves03从节点"><a href="#5-3、cdhslave01-cdhslaves03从节点" class="headerlink" title="5.3、cdhslave01~cdhslaves03从节点"></a>5.3、cdhslave01~cdhslaves03从节点</h3><p><img src="/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9NTP%E6%9C%8D%E5%8A%A1-%E4%BB%8E%E8%8A%82%E7%82%B9.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="5-4、修改完配置文件，重启NTP服务"><a href="#5-4、修改完配置文件，重启NTP服务" class="headerlink" title="5.4、修改完配置文件，重启NTP服务"></a>5.4、修改完配置文件，重启NTP服务</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">systemctl restart ntpd</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="6、修改主机ip"><a href="#6、修改主机ip" class="headerlink" title="6、修改主机ip"></a>6、修改主机ip</h2><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/etc/</span>sysconfig<span class="hljs-regexp">/network-scripts/i</span>fcfg-enp4s0<br></code></pre></td></tr></table></figure>
+
+<p><img src="/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BAip.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="7、修改集群中的hosts文件"><a href="#7、修改集群中的hosts文件" class="headerlink" title="7、修改集群中的hosts文件"></a>7、修改集群中的hosts文件</h2><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">vi <span class="hljs-regexp">/etc/</span>hosts<br></code></pre></td></tr></table></figure>
+
+<p><img src="/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9hosts%E6%96%87%E4%BB%B6.png" srcset="/img/loading.gif" lazyload></p>
+<p>将修改后的hosts文件同步到集群中的其他所有节点中</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs elixir">scp /etc/hosts root<span class="hljs-variable">@cdhslave01</span><span class="hljs-symbol">:/etc/hosts</span><br>scp /etc/hosts root<span class="hljs-variable">@cdhslave02</span><span class="hljs-symbol">:/etc/hosts</span><br>scp /etc/hosts root<span class="hljs-variable">@cdhslave03</span><span class="hljs-symbol">:/etc/hosts</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="8、修改客户端hosts文件"><a href="#8、修改客户端hosts文件" class="headerlink" title="8、修改客户端hosts文件"></a>8、修改客户端hosts文件</h2><p>进入<strong>C:\Windows\System32\drivers\etc</strong> 目录下，以管理员身份打开<strong>hosts</strong>文件。</p>
+<p><img src="/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84hosts%E6%96%87%E4%BB%B6.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/CDH6.0.1%E6%9B%B4%E6%8D%A2IP.assets/%E4%BF%AE%E6%94%B9%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84hosts%E6%96%87%E4%BB%B62.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="9、重启集群服务"><a href="#9、重启集群服务" class="headerlink" title="9、重启集群服务"></a>9、重启集群服务</h2><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs axapta"><span class="hljs-meta">## 所有节点</span><br>sudo systemctl start cloudera-scm-agent<br><br><span class="hljs-meta">## 主节点</span><br>sudo systemctl start cloudera-scm-<span class="hljs-keyword">server</span><br><br><span class="hljs-meta">## 重置启动失败的服务</span><br>systemctl reset-failed cloudera-scm-<span class="hljs-keyword">server</span>.service<br><br><span class="hljs-meta">## 查看服务启动日志</span><br>sudo tail -f /<span class="hljs-built_in">var</span>/log/cloudera-scm-<span class="hljs-keyword">server</span>/cloudera-scm-<span class="hljs-keyword">server</span>.log<br></code></pre></td></tr></table></figure>
+
+<h2 id="10、访问Cloudera-Manager-WEB登录页面"><a href="#10、访问Cloudera-Manager-WEB登录页面" class="headerlink" title="10、访问Cloudera Manager WEB登录页面"></a>10、访问Cloudera Manager WEB登录页面</h2><p>打开浏览器，访问地址：<code>http://&lt;server_host&gt;:7180</code>，默认账号和密码都为<strong>admin</strong>：</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
